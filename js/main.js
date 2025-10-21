@@ -67,3 +67,60 @@ btnMostrarTodos.addEventListener('click', () => {
     });
 });
 
+// ejercicio 3
+const inputBuscar = document.getElementById('inputBuscar');
+const btnBuscar = document.getElementById('btnBuscar');
+const resultado = document.getElementById('resultado');
+
+
+function buscarPokemon(valor) {
+  const nombre = valor.toLowerCase().trim();
+  if (!nombre) return;
+
+
+  resultado.innerHTML = 'Buscando...';
+
+
+  fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`)
+    .then(res => res.json())
+    .then(pokemon => {
+      const imagen = pokemon.sprites.other['official-artwork'].front_default;
+      const id = pokemon.id;
+      const tipo = pokemon.types[0].type.name;
+
+
+      resultado.innerHTML = `
+        <div class="pokemon">
+          <div class="pokemon-imagen">
+            <img src="${imagen}" alt="${pokemon.name}">
+          </div>
+          <div class="pokemon-info">
+            <div class="nombre-contenedor">
+              <p class="pokemon-id">#${id.toString().padStart(3, '0')}</p>
+              <h2 class="pokemon-nombre">${pokemon.name}</h2>
+            </div>
+            <div class="pokemon-tipos">
+              <p class="${tipo} tipo">${tipo}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .catch(() => {
+      resultado.innerHTML = `<p style="color: red;">No se encontró el Pokémon</p>`;
+    });
+}
+
+
+inputBuscar.addEventListener('change', () => {
+  buscarPokemon(inputBuscar.value);
+});
+
+
+btnBuscar.addEventListener('click', () => {
+  buscarPokemon(inputBuscar.value);
+});
+
+
+
+
